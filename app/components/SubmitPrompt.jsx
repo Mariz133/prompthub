@@ -1,46 +1,64 @@
-'use client';
-
 import { useState } from 'react';
-import { supabase } from '../../lib/supabase';
 
-export default function SubmitPrompt({ onSubmit }) {
-  const [text, setText] = useState('');
-  const [category, setCategory] = useState('');
+export default function SubmitPrompt() {
+  const [prompt, setPrompt] = useState('');
+  const [expandedPrompt, setExpandedPrompt] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!text || !category) return;
+    setLoading(true);
+    setError(null);
 
-    const { error } = await supabase.from('prompts').insert([{ text, category }]);
+    try {
+      const response = await fetch('/api/analyze-prompt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ promptText: prompt }),
+      });
 
-    if (error) {
-      console.error('Insert error:', error);
-      alert('Failed to save prompt.');
-    } else {
-      setText('');
-      setCategory('');
-      onSubmit(); // 👈 refetch prompts
+      if (!response.ok) throw new Error('Failed to analyze the prompt');
+
+      const data = await response.json();
+      setExpandedPrompt(data.expandedPrompt);
+    } catch (error) {
+      setError('Failed to expand the prompt');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <h1 className="text-2xl font-bold">🧠 PromptHub</h1>
-      <input
-        className="w-full border p-2"
-        placeholder="Enter your AI prompt..."
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-      />
-      <input
-        className="w-full border p-2"
-        placeholder="Category"
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-      />
-      <button className="bg-blue-500 text-white px-4 py-2 rounded" type="submit">
-        Submit
-      </button>
-    </form>
+    <div className="max-w-xl mx-auto p-4">
+      <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+        <label htmlFor="prompt" className="text-lg">Enter Prompt:</label>
+        <input
+          type="text"
+          id="prompt"
+          className="border p-2 rounded"
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          required
+        />
+        <button
+          type="submit"
+          className="bg-blue-500 text-white p-2 rounded"
+          disabled={loading}
+        >
+          {loading ? 'Analyzing...' : 'Analyze Prompt'}
+        </button>
+      </form>
+  
+      {expandedPrompt && (
+        <div className="mt-6">
+          <h3 className="font-semibold text-xl">Expanded Prompt:</h3>
+          <p className="p-4 bg-gray-100 border rounded">{expandedPrompt}</p>
+        </div>
+      )}
+  
+      {error && <p className="text-red-500">{error}</p>}
+    </div>
   );
+  
 }
