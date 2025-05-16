@@ -1,36 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-
+import { useState } from 'react';
 
 export default function AnalyzePage() {
   const [promptText, setPromptText] = useState('');
   const [expandedPrompt, setExpandedPrompt] = useState('');
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const supabase = createClientComponentClient();
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-
-      if (!user) {
-        router.push('/login?message=login-required');
-      }
-    };
-
-    getUser();
-  }, []);
-
-  useEffect(() => {
-    if (searchParams.get('message') === 'login-required') {
-      setErrorMsg('You must be logged in to use the Prompt Analyzer.');
-    }
-  }, [searchParams]);
 
   const handleAnalyze = async () => {
     setLoading(true);
