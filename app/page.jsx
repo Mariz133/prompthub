@@ -56,6 +56,11 @@ export default function Home() {
       {/* Main App Functionality */}
       {/* <SubmitPrompt onSubmit={fetchPrompts} /> */}
       <PromptList prompts={prompts} onDelete={fetchPrompts} />
+
+      <footer className="mt-10 text-center text-sm text-gray-500">
+  Built with ❤️ using Next.js, Tailwind CSS & Supabase
+</footer>
+
     </main>
   );
 }
