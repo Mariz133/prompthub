@@ -1,5 +1,6 @@
 'use client';
 
+import LogoutButton from '../components/LogoutButton';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '../../lib/supabase';
@@ -62,6 +63,11 @@ export default function AnalyzePageClient() {
           <pre className="whitespace-pre-wrap">{expandedPrompt}</pre>
         </div>
       )}
+       <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Welcome to Analyze Page</h1>
+      <LogoutButton />
+    </div>
+
     </main>
   );
 }
