@@ -1,52 +1,76 @@
 'use client';
-import { useState, useEffect } from 'react';
+
+import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '../../lib/supabase';
 
-export default function LoginPage() {
+export default function LoginPageClient() {
   const [email, setEmail] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
-  const searchParams = useSearchParams();
+  const [msg, setMsg] = useState('');
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
+  // 🔑 Handle magic link callback with ?code=
   useEffect(() => {
-    const message = searchParams.get('message');
-    if (message === 'login-required') {
-      setErrorMsg('You must be logged in to use the Prompt Analyzer.');
-    }
-  }, [searchParams]);
+    const code = searchParams.get('code');
+    if (code) {
+      setLoading(true);
 
+      supabase.auth.exchangeCodeForSession()
+
+        .then(({ data, error }) => {
+          if (error) {
+            console.error('Session exchange failed:', error.message);
+            setMsg('Login failed. Please try again.');
+            setLoading(false);
+          } else {
+            router.replace('/analyze');
+          }
+        });
+    }
+  }, [searchParams, router]);
+
+  // 🔐 Send magic link
   const handleLogin = async (e) => {
     e.preventDefault();
-    const { error } = await supabase.auth.signInWithOtp({ email });
+    setMsg('');
+    setLoading(true);
+
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/login`,
+      },
+    });
+
+    setLoading(false);
+
     if (error) {
-      alert('Login error: ' + error.message);
+      setMsg('Login failed: ' + error.message);
     } else {
-      alert('Check your email for the login link!');
+      setMsg('Check your email for the login link.');
     }
   };
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen p-4">
-      <h1 className="text-2xl font-bold mb-4">Login</h1>
-
-      {errorMsg && (
-        <p className="text-red-600 mb-4 text-center">{errorMsg}</p>
-      )}
-
-      <form onSubmit={handleLogin} className="space-y-4 flex flex-col items-center">
+    <div className="p-6 max-w-md mx-auto">
+      <h1 className="text-xl font-bold mb-4">Login</h1>
+      {msg && <p className="mb-4 text-red-500">{msg}</p>}
+      {loading && <p>Processing login...</p>}
+      <form onSubmit={handleLogin} className="flex flex-col gap-4">
         <input
           type="email"
-          className="p-2 border rounded w-64"
-          placeholder="Your email"
+          placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          className="border p-2"
         />
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          Send Login Link
+        <button type="submit" className="bg-blue-600 text-white p-2 rounded">
+          Send Magic Link
         </button>
       </form>
-    </main>
+    </div>
   );
 }

@@ -9,7 +9,9 @@ export default async function AnalyzePage() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Add a slight delay or check session carefully
   if (!user) {
+    // Wait briefly to avoid flicker? Or just redirect immediately but client should handle it
     redirect('/login?message=login-required');
   }
 

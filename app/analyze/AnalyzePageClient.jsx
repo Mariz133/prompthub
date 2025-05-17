@@ -1,11 +1,25 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { supabase } from '../../lib/supabase';
 
-export default function AnalyzePage() {
+export default function AnalyzePageClient() {
   const [promptText, setPromptText] = useState('');
   const [expandedPrompt, setExpandedPrompt] = useState('');
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        router.push('/login?message=login-required');
+      }
+    };
+
+    checkAuth();
+  }, []);
 
   const handleAnalyze = async () => {
     setLoading(true);

@@ -6,7 +6,7 @@ export async function POST(request) {
   
   try {
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o-mini', // Or whichever model you're using
+      model: 'gpt-4o-mini', // Or whichever model  using
       messages: [{ role: 'user', content: promptText }],
     });
 
