@@ -9,6 +9,7 @@ export default function AnalyzePageClient() {
   const [promptText, setPromptText] = useState('');
   const [expandedPrompt, setExpandedPrompt] = useState('');
   const [loading, setLoading] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true); // Add auth loading state
   const router = useRouter();
 
   useEffect(() => {
@@ -16,6 +17,8 @@ export default function AnalyzePageClient() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         router.push('/login?message=login-required');
+      } else {
+        setAuthLoading(false); // Stop loading if authenticated
       }
     };
 
@@ -40,10 +43,13 @@ export default function AnalyzePageClient() {
     }
   };
 
+  if (authLoading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
   return (
     <main className="max-w-xl mx-auto p-6">
       <h1 className="text-xl font-semibold mb-4">What Will OpenAI Say?</h1>
-
       <textarea
         className="w-full border p-2 rounded mb-4"
         placeholder="Enter your prompt"
@@ -64,10 +70,9 @@ export default function AnalyzePageClient() {
           <pre className="whitespace-pre-wrap">{expandedPrompt}</pre>
         </div>
       )}
-       <div className="p-4">
-
-      <LogoutButton />
-    </div>
+      <div className="p-4">
+        <LogoutButton />
+      </div>
     </main>
   );
 }

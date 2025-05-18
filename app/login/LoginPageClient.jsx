@@ -8,20 +8,20 @@ export default function LoginPageClient() {
   const [email, setEmail] = useState('');
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
+  const [sessionLoading, setSessionLoading] = useState(true); // Add session loading state
   const router = useRouter();
   const searchParams = useSearchParams();
   const message = searchParams.get('message');
-  
+
   useEffect(() => {
-    // Immediately check if session exists
     const checkLogin = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+      const { data: { session } } = await supabase.auth.getSession();
 
       if (session) {
         // ✅ Already logged in, redirect
         router.replace('/analyze');
+      } else {
+        setSessionLoading(false); // Stop loading if no session
       }
     };
 
@@ -43,6 +43,10 @@ export default function LoginPageClient() {
     setLoading(false);
     setMsg(error ? 'Login failed: ' + error.message : 'Check your email for the login link.');
   };
+
+  if (sessionLoading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
