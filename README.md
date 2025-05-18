@@ -1,36 +1,152 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+📦 PromptHub
+PromptHub is a full-stack AI-powered web application that allows users to analyze, enhance, and explore text prompts using OpenAI’s GPT-4o. It features secure magic link authentication via Supabase, a clean and responsive UI using Tailwind CSS, and seamless serverless backend functionality powered by Next.js App Router.
 
-## Getting Started
+✨ Overview
+PromptHub empowers users to:
 
-First, run the development server:
+✅ Submit creative or instructional prompts
 
-```bash
+🤖 Instantly analyze or expand their ideas using OpenAI
+
+🔐 Authenticate securely with email-based magic link login
+
+📱 Use the app from any device via a mobile-friendly interface
+
+This project was created as a final full-stack assignment to demonstrate practical use of:
+
+Next.js 14 App Router
+
+Supabase
+
+OpenAI API integration
+
+⚙️ Features
+Frontend & Backend: Next.js 14 (App Router)
+
+Authentication: Supabase Magic Link (email OTP)
+
+Prompt Analyzer: Submit a prompt and receive an AI-generated expansion
+
+Styling: Tailwind CSS
+
+AI Integration: OpenAI GPT-4o
+
+Deployment: Vercel
+
+Routing: Fully client-rendered experience with protected routes
+
+Login Flow: Simple, responsive, and redirect-safe
+
+🧰 Tech Stack
+Next.js 14
+
+Tailwind CSS
+
+Supabase
+
+OpenAI API
+
+Vercel (for deployment)
+
+🛠️ Setup Guide
+✅ Prerequisites
+Node.js (v18+)
+
+Git
+
+GitHub account
+
+Supabase project and API keys
+
+OpenAI API key
+
+✅ 1. Clone the Repository
+
+git clone https://github.com/Mariz133/prompthub.git
+cd prompthub
+
+✅ 2. Install Dependencies
+
+npm install
+
+
+✅ 3. Set Up Environment Variables
+Create a .env.local file in the root directory:
+
+
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+OPENAI_API_KEY=your_openai_api_key
+
+✅ 4. Run the Development Server
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Visit http://localhost:3000 to test locally.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+✅ 5. Set Up Supabase
+Log into Supabase
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Create a new project
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+In the SQL editor, run:
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+create table prompts (
+  id uuid primary key default uuid_generate_v4(),
+  text text,
+  category text,
+  created_at timestamp default now()
+);
+Enable Magic Link (email-based authentication)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+🚀 Live Deployment
+https://prompthub-five.vercel.app/
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+📘 Learning & Development Notes
+Key Concepts I Learned
+Next.js App Router: Built with server/client component architecture using the modern app/ directory
 
-## Deploy on Vercel
+Supabase Auth: Integrated magic link email login with route protection (e.g. /analyze redirects unauthenticated users)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+OpenAI API: Used GPT-4o for prompt analysis via secure backend API routes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Component Design: Created reusable components (SubmitPrompt, PromptList, LogoutButton)
+
+Deployment: Connected GitHub to Vercel and managed .env securely
+
+AI Tools Used
+ChatGPT (OpenAI): Helped scaffold the project, debug Supabase edge cases, and refine login logic
+
+GitHub Copilot: Assisted with React component development and cleanup
+
+📂 File Structure
+pgsql
+Copy
+Edit
+prompthub/
+├── app/
+│   ├── analyze/
+│   │   ├── AnalyzePageClient.jsx
+│   │   └── page.jsx
+│   ├── api/
+│   │   └── analyzeprompt/
+│   │       └── route.js
+│   ├── login/
+│   │   ├── LoginPageClient.jsx
+│   │   └── page.jsx
+│   ├── components/
+│   │   ├── SubmitPrompt.jsx
+│   │   ├── PromptList.jsx
+│   │   └── LogoutButton.jsx
+│   ├── page.jsx        # Landing page + Prompt Feed
+│   └── layout.js
+├── lib/
+│   ├── supabase.js
+│   └── openai.js
+├── .env.local
+└── README.md
+
+✅ TODOs / Known Issues
+ Add prompt history and save to Supabase
+
+ Improve loading states with skeleton screens or spinners
