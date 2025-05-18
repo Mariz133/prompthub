@@ -42,7 +42,8 @@ export default function AnalyzePageClient() {
 
   return (
     <main className="max-w-xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Try the Prompt Analyzer</h1>
+      <h1 className="text-xl font-semibold mb-4">What Will OpenAI Say?</h1>
+
       <textarea
         className="w-full border p-2 rounded mb-4"
         placeholder="Enter your prompt"
@@ -64,7 +65,7 @@ export default function AnalyzePageClient() {
         </div>
       )}
        <div className="p-4">
-        
+
       <LogoutButton />
     </div>
     </main>
