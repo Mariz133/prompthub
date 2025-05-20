@@ -36,6 +36,21 @@ export default function AnalyzePageClient() {
 
       const data = await response.json();
       setExpandedPrompt(data.expandedPrompt);
+       // ✅ Get current user
+    const { data: { user } } = await supabase.auth.getUser();
+
+    // ✅ Save prompt to Supabase
+    const { error } = await supabase.from('prompts').insert([
+      {
+        text: promptText,
+        category: 'analyzed', // optional: you can customize this
+        user_id: user.id,
+      },
+    ]);
+
+    if (error) {
+      console.error('Error saving prompt to Supabase:', error.message);
+    }
     } catch (error) {
       console.error('Error analyzing prompt:', error);
     } finally {
