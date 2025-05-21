@@ -12,6 +12,9 @@ export default function AnalyzePageClient() {
   const [loading, setLoading] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
   const router = useRouter();
+  const [selectedHistory, setSelectedHistory] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
 
   // Check authentication
   useEffect(() => {
@@ -45,8 +48,12 @@ export default function AnalyzePageClient() {
           text: promptText,
           category: 'analyzed',
           user_id: user.id,
+          response: data.expandedPrompt, // Save the OpenAI response too!
+          
         },
       ]);
+      setRefreshTrigger((prev) => prev + 1); // 👈 trigger sidebar re-fetch
+
 
       if (error) {
         console.error('Error saving prompt to Supabase:', error.message);
@@ -67,7 +74,16 @@ export default function AnalyzePageClient() {
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      <PromptSidebar onSelect={(text) => setPromptText(text)} />
+      <PromptSidebar
+        refreshTrigger={refreshTrigger}
+        onSelect={(item) => {
+         setSelectedHistory(item);
+          setPromptText(item.text);
+          setExpandedPrompt(item.response);
+       }}
+      />
+
+
 
       {/* Main Content */}
       <main className="flex-1 p-6">
