@@ -1,29 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
-import PromptList from './components/PromptList';
-
 export default function Home() {
-  const [prompts, setPrompts] = useState([]);
-
-  const fetchPrompts = async () => {
-    const { data, error } = await supabase
-      .from('prompts')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error(error);
-    } else {
-      setPrompts(data);
-    }
-  };
-
-  useEffect(() => {
-    fetchPrompts();
-  }, []);
-
   return (
     <main className="max-w-xl mx-auto p-6">
       {/* Landing Section */}
@@ -51,16 +28,11 @@ export default function Home() {
             Login
           </a>
         </div>
-        </section>
-
-      {/* Main App Functionality */}
-      {/* <SubmitPrompt onSubmit={fetchPrompts} /> */}
-      <PromptList prompts={prompts} onDelete={fetchPrompts} />
+      </section>
 
       <footer className="mt-10 text-center text-sm text-gray-500">
-      Built with ❤️ using Next.js, Tailwind CSS & Supabase
-     </footer>
-
+        Built with ❤️ using Next.js, Tailwind CSS & Supabase
+      </footer>
     </main>
   );
 }
