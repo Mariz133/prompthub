@@ -1,4 +1,5 @@
-📦 PromptHub
+# 📦 PromptHub
+
 PromptHub is a full-stack AI-powered web application that allows users to analyze, enhance, and explore text prompts using OpenAI’s GPT-4o. It features secure magic link authentication via Supabase, a clean and responsive UI using Tailwind CSS, and seamless serverless backend functionality powered by Next.js App Router.
 
 ✨ Overview
@@ -12,30 +13,27 @@ PromptHub empowers users to:
 
 📱 Use the app from any device via a mobile-friendly interface
 
+🕘 View history of previously analyzed prompts and responses  
+
+
 This project was created as a final full-stack assignment to demonstrate practical use of:
 
-Next.js 14 App Router
+- ✅ Next.js 14 App Router  
+- ✅ Supabase  
+- ✅ OpenAI API integration  
 
-Supabase
-
-OpenAI API integration
 
 ⚙️ Features
-Frontend & Backend: Next.js 14 (App Router)
-
-Authentication: Supabase Magic Link (email OTP)
-
-Prompt Analyzer: Submit a prompt and receive an AI-generated expansion
-
-Styling: Tailwind CSS
-
-AI Integration: OpenAI GPT-4o
-
-Deployment: Vercel
-
-Routing: Fully client-rendered experience with protected routes
-
-Login Flow: Simple, responsive, and redirect-safe
+- **Frontend & Backend:** Next.js 14 (App Router)  
+- **Authentication:** Supabase Magic Link (email OTP)  
+- **Prompt Analyzer:** Submit a prompt and receive an AI-generated expansion  
+- **Prompt History Sidebar:** View and revisit previous prompts and responses  
+- **Data Storage:** Supabase database with saved prompt + OpenAI response  
+- **Styling:** Tailwind CSS  
+- **AI Integration:** OpenAI GPT-4o  
+- **Deployment:** Vercel  
+- **Routing:** Fully client-rendered experience with protected routes  
+- **Login Flow:** Simple, responsive, and redirect-safe  
 
 🧰 Tech Stack
 Next.js 14
@@ -50,6 +48,7 @@ Vercel (for deployment)
 
 🛠️ Setup Guide
 ✅ Prerequisites
+
 Node.js (v18+)
 
 Git
@@ -91,12 +90,15 @@ Create a new project
 In the SQL editor, run:
 
 
+```sql
 create table prompts (
   id uuid primary key default uuid_generate_v4(),
   text text,
   category text,
   created_at timestamp default now()
 );
+```
+
 Enable Magic Link (email-based authentication)
 
 🚀 Live Deployment
@@ -120,9 +122,7 @@ ChatGPT (OpenAI): Helped scaffold the project, debug Supabase edge cases, and re
 GitHub Copilot: Assisted with React component development and cleanup
 
 📂 File Structure
-pgsql
-Copy
-Edit
+ 
 prompthub/
 ├── app/
 │   ├── analyze/
@@ -147,6 +147,10 @@ prompthub/
 └── README.md
 
 ✅ TODOs / Known Issues
- Add prompt history and save to Supabase
+✅ Add prompt history and save to Supabase
 
- Improve loading states with skeleton screens or spinners
+✅ Save OpenAI response along with prompt
+
+✅ Add history sidebar to /analyze page
+
+⏳ Improve loading states with skeleton screens or spinners
